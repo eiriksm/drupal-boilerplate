@@ -57,12 +57,15 @@ RUN sed -i -e "s/;daemonize\s*=\s*yes/daemonize = no/g" /etc/php5/fpm/php-fpm.co
 RUN find /etc/php5/cli/conf.d/ -name "*.ini" -exec sed -i -re 's/^(\s*)#(.*)/\1;\2/g' {} \;
 
 # Add composer and drush
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-RUN ln -s /usr/local/bin/composer /usr/bin/composer
-RUN wget https://github.com/drush-ops/drush/archive/6.x.zip && unzip 6.x.zip && mv drush-6.x /usr/local/src/drush
-RUN cd /usr/local/src/drush && composer install
-RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
+#RUN curl -sS https://getcomposer.org/installer | php
+#RUN mv composer.phar /usr/local/bin/composer
+#RUN ln -s /usr/local/bin/composer /usr/bin/composer
+#RUN wget https://github.com/drush-ops/drush/archive/6.x.zip && unzip 6.x.zip && mv drush-6.x /usr/local/src/drush
+#RUN cd /usr/local/src/drush && composer install
+#RUN ln -s /usr/local/src/drush/drush /usr/bin/drush
+
+# Sysadmin tools
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install drush
 
 # Supervisor Config
 RUN /usr/bin/easy_install supervisor
@@ -73,7 +76,7 @@ RUN mkdir --parents /root/.drush
 RUN ln -s /project/drush/drushrc.php /root/.drush/drushrc.php
 
 # Allow to add id_rsa
-VOLUME ['/root/.ssh']
+VOLUME ['/root/.ssh/id_rsa']
 
 EXPOSE 80
 EXPOSE 22
