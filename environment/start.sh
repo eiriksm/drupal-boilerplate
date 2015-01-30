@@ -44,6 +44,10 @@ if [[ ! -f /project/drupal/sites/default/settings.php ]] || [[ $RESTART == true 
   cd /project/drupal/
   DRUPAL_PASSWORD=`pwgen -c -n -1 12`
   drush site-install minimal standard -y --account-name=admin --db-url="mysqli://drupal:${DRUPAL_PASSWORD}@localhost/drupal" --db-su=root --db-su-pw=$MYSQL_PASSWORD
+
+	killall mysqld
+	sleep 10s
+	sudo service mysqld start
 fi
 
 # Go back to your room!
